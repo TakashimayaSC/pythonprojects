@@ -7,8 +7,8 @@ import datetime
 import numpy as np
 import pandas as pd
 
-reddit = praw.Reddit(client_id="REMOVED",
-                     client_secret="REMOVED",
+reddit = praw.Reddit(client_id="MdOr0zltTKcMzw",
+                     client_secret="JSVVV2ZVC08d8DzBGlnn-6VKCA4",
                      user_agent="PyCharms.script.subredditstats:v0.0.5 (by /u/TakashimayaSC )")
 
 print(reddit.read_only)  # Output: True
@@ -19,7 +19,7 @@ print("Starting on the Generated List")
 print("Time Generated List Started:", start_generated)
 
 subreddit_list = []
-subreddit_limit = 500
+subreddit_limit = 10
 post_limit = 5
 counter = 0
 data_list_generated = []
@@ -64,6 +64,12 @@ if counter < subreddit_limit + 1:
 
 
 print(8*"-")
+# print("data_list_generated", data_list_generated)
+# print("np_array_generated", np_array_generated)
+# print("np_array_subreddit_names", np_array_subreddit_names)
+
+# np.savetxt("np_array_generated.csv", np_array_generated, delimiter=",")
+# np.savetxt("np_array_subreddit_names.csv", np_array_subreddit_names, delimiter=",", fmt='%s')
 pd_df_subreddit_stats = pd.DataFrame({
                         'Subreddit Name': np_array_subreddit_names[:, 0],
                         'Mean Controversial': np_array_generated[:, 0],
