@@ -7,7 +7,7 @@ import datetime
 import numpy as np
 import pandas as pd
 
-reddit = praw.Reddit(client_id="REMOVED",
+reddit = praw.Reddit(client_id="REMOVE",
                      client_secret="REMOVED",
                      user_agent="PyCharms.script.subredditstats:v0.0.5 (by /u/TakashimayaSC )")
 
@@ -19,48 +19,43 @@ print("Starting on the Generated List")
 print("Time Generated List Started:", start_generated)
 
 subreddit_list = []
-subreddit_limit = 10
+subreddit_limit = 5
 post_limit = 5
 counter = 0
 data_list_generated = []
-np_array_generated = np.zeros(shape=(subreddit_limit + 1, 4), dtype = float)
-np_array_subreddit_names = np.zeros(shape=(subreddit_limit + 1, 1), dtype = np.dtype('U100'))
+np_array_generated = np.zeros(shape=(subreddit_limit, 4), dtype = float)
+np_array_subreddit_names = np.zeros(shape=(subreddit_limit, 1), dtype = np.dtype('U100'))
 
-if counter < subreddit_limit + 1:
-    for subreddit in reddit.subreddits.popular(limit=subreddit_limit):
+for subreddit in reddit.subreddits.popular(limit=subreddit_limit):
 
-        contoversial_list = []; top_list = []; new_list = []; hot_list = []
+    contoversial_list = []; top_list = []; new_list = []; hot_list = []
 
-        for submission in subreddit.controversial(limit=post_limit):
-            u_r = submission.upvote_ratio
-            contoversial_list.append(u_r)
-        for submission in subreddit.top(limit=post_limit):
-            u_r = submission.upvote_ratio
-            top_list.append(u_r)
-        for submission in subreddit.new(limit=post_limit):
-            u_r = submission.upvote_ratio
-            new_list.append(u_r)
-        for submission in subreddit.hot(limit=post_limit):
-            u_r = submission.upvote_ratio
-            hot_list.append(u_r)
+    for submission in subreddit.controversial(limit=post_limit):
+        u_r = submission.upvote_ratio
+        contoversial_list.append(u_r)
+    for submission in subreddit.top(limit=post_limit):
+        u_r = submission.upvote_ratio
+        top_list.append(u_r)
+    for submission in subreddit.new(limit=post_limit):
+        u_r = submission.upvote_ratio
+        new_list.append(u_r)
+    for submission in subreddit.hot(limit=post_limit):
+        u_r = submission.upvote_ratio
+        hot_list.append(u_r)
 
-        subreddit_name = subreddit.display_name
-        mean_cont = round(stats.mean(contoversial_list), 4)
-        mean_top = round(stats.mean(top_list), 4)
-        mean_new = round(stats.mean(new_list), 4)
-        mean_hot = round(stats.mean(hot_list), 4)
+    subreddit_name = subreddit.display_name
+    mean_cont = round(stats.mean(contoversial_list), 4)
+    mean_top = round(stats.mean(top_list), 4)
+    mean_new = round(stats.mean(new_list), 4)
+    mean_hot = round(stats.mean(hot_list), 4)
 
-        if counter < subreddit_limit + 1:
-            data_list_generated.append(subreddit_name); np_array_subreddit_names[counter, 0] = subreddit_name
-            data_list_generated.append(mean_cont); np_array_generated[counter,0] = mean_cont
-            data_list_generated.append(mean_top); np_array_generated[counter,1] = mean_top
-            data_list_generated.append(mean_new); np_array_generated[counter,2] = mean_new
-            data_list_generated.append(mean_hot); np_array_generated[counter,3] = mean_hot
-            print("Data for /r/", subreddit_name, "computed and added to list...")
-            counter = counter + 1
-
-        elif counter == subreddit_limit + 1:
-            break
+    data_list_generated.append(subreddit_name); np_array_subreddit_names[counter, 0] = subreddit_name
+    data_list_generated.append(mean_cont); np_array_generated[counter,0] = mean_cont
+    data_list_generated.append(mean_top); np_array_generated[counter,1] = mean_top
+    data_list_generated.append(mean_new); np_array_generated[counter,2] = mean_new
+    data_list_generated.append(mean_hot); np_array_generated[counter,3] = mean_hot
+    print("Data for /r/", subreddit_name, "computed and added to list...")
+    counter = counter + 1
 
 print(8*"-")
 pd_df_subreddit_stats = pd.DataFrame({
@@ -72,7 +67,7 @@ pd_df_subreddit_stats = pd.DataFrame({
                                     })
 
 print(pd_df_subreddit_stats)
-pd_df_subreddit_stats.to_csv("pd_df_subreddit_stats.csv", index=false)
+pd_df_subreddit_stats.to_csv("pd_df_subreddit_stats.csv", index=False)
 print("pd_df_subreddit_stats csv file generated")
 print(8*"-")
 
